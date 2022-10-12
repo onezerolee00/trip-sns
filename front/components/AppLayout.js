@@ -5,6 +5,7 @@ import { Menu, Input, Row, Col } from 'antd';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
+import { FormOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons';
 
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
@@ -37,16 +38,19 @@ const AppLayout = ({children}) => {
             <Global />
             <Menu mode="horizontal">
                 <Menu.Item>
-                <Link href="/"><a>노드버드</a></Link>
-                </Menu.Item>
-                <Menu.Item>
-                <Link href="/profile"><a>프로필</a></Link>
+                <img style={{width: '50px', height: '50px'}} src="https://velog.velcdn.com/images/onezerolee00/post/a43beec0-e69c-4da9-b98e-b0b13f982af0/image.png" />
                 </Menu.Item>
                 <Menu.Item>
                 <SearchInput enterButton />
                 </Menu.Item>
                 <Menu.Item>
-                <Link href="/signup"><a>회원가입</a></Link>
+                <Link href="/signup"><a><FormOutlined key="sign up bar"/> Sign up</a></Link>
+                </Menu.Item>
+                <Menu.Item>
+                <Link href="/profile"><a><UserOutlined key="profile bar"/> Profile</a></Link>
+                </Menu.Item>
+                <Menu.Item>
+                <Link href="/"><a><HomeOutlined key="feed bar"/> Feed</a></Link>
                 </Menu.Item>
             </Menu>
             <Row gutter={8}>
@@ -54,7 +58,6 @@ const AppLayout = ({children}) => {
                     {me ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12}>{children}</Col>
-                <Col xs={24} md={6}><a href='https://www.zerocho.com' target="_blank" rel="noreferrer noopner">Made by ZeroCho</a></Col>
             </Row>
         </div>
     )
