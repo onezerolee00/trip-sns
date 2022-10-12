@@ -55,11 +55,11 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 const dummyUser = (data) => ({
     ...data,
-    nickname: '제로초',
+    nickname: 'lee',
     id: 1,
     Posts: [{ id: 1 }],
-    Followings: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal'}],
-    Followers: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal'}],
+    Followings: [{ nickname: 'lee' }, { nickname: 'kim' }, { nickname: 'park'}],
+    Followers: [{ nickname: 'lee' }, { nickname: 'kim' }, { nickname: 'park'}],
 })
 
 // export const loginAction = (data) => {

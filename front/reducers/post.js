@@ -79,7 +79,7 @@ const dummyPost = (data) => ({
     content: data.content,
     User: {
         id: 1,
-        nickname: '제로초',
+        nickname: '이원영',
     },
     Images: [],
     Comments: [],
@@ -90,7 +90,7 @@ const dummyComment = (data) => ({
     content: data,
     User: {
         id: 1,
-        nickname: '제로초',
+        nickname: '이원영',
     },
 });
 
