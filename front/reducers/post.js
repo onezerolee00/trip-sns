@@ -24,6 +24,7 @@ export const initialState = {
 // + 인피니트 스크롤링
 export const generateDummyPost = (number) => Array(number).fill().map(() => ({
     id: shortId.generate(),
+    Title: faker.lorem.sentence(),
     User: {
         id: shortId.generate(),
         nickname: faker.name.findName()
@@ -76,6 +77,7 @@ export const addComment = (data) => ({
 
 const dummyPost = (data) => ({
     id: data.id,
+    Title: data.Title,
     content: data.content,
     User: {
         id: 1,
