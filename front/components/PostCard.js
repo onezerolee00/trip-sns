@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
-import { RetweetOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { PictureTwoTone, ScheduleOutlined, ScheduleTwoTone, PictureOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PostImages from './PostImages';
@@ -11,10 +11,19 @@ import FollowButton from './FollowButton';
 
 import { REMOVE_POST_REQUEST } from '../reducers/post';
 import styled from 'styled-components';
+import PostRoutes from './PostRoutes';
+import PostRouteContents from './PostRouteContents';
 
 const Title = styled.div`
     margin: 10px 10px;
     font-weight: bold;
+`;
+
+const Icons = styled.div`
+    display: flex;
+    fontSize: 30px;
+    margin: 5px 10px;
+
 `;
 
 const PostCard = ({ post }) => {
@@ -22,9 +31,14 @@ const PostCard = ({ post }) => {
     const { removePostLoading } = useSelector((state) => state.post);
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
+    const [pictureOrRoute, setPictureOrRoute] = useState(true);
 
     const onToggleLike = useCallback(() => {
         setLiked((prev) => !prev); //true를 false로 false를 true로 만드는 코드
+    }, []);
+
+    const onTogglePictureOrRoute = useCallback(() => {
+        setPictureOrRoute((prev) => !prev);
     }, []);
 
     const onToggleComment = useCallback(() => {
@@ -47,8 +61,23 @@ const PostCard = ({ post }) => {
                     post.User.nickname,
                 ]}
                 //title={post.User.nickname}
-                cover={[<Title>{'제목 : ' + post.Title}</Title>,
-                    post.Images[0] && <PostImages images={post.Images} />,]}
+                cover={[ 
+                    <Icons>
+                        {pictureOrRoute 
+                        ? <PictureTwoTone twoToneColor="#9c9c9c" style={{fontSize: '25px', color: '#9f9f9f', margin: '5px 5px 0px 0px'}} onClick={onTogglePictureOrRoute} />
+                        :<PictureOutlined style={{fontSize: '25px', color: '#9f9f9f', margin: '5px 5px 0px 0px'}} onClick={onTogglePictureOrRoute}/>}
+                        {pictureOrRoute 
+                        ? <ScheduleOutlined style={{fontSize: '25px', color: '#9f9f9f', margin: '5px 5px 0px 0px'}} onClick={onTogglePictureOrRoute}/>
+                        : <ScheduleTwoTone twoToneColor="#9c9c9c" style={{fontSize: '25px', color: '#9f9f9f' , margin: '5px 5px 0px 0px' }} onClick={onTogglePictureOrRoute} />}
+                    </Icons>,
+                    <Title>{'제목 : ' + post.Title}</Title>,
+                    <div>
+                        {pictureOrRoute
+                        ? post.Images[0] && <PostImages images={post.Images} />
+                        : <PostRoutes />}
+                    </div>,
+                    
+                    ]}
                 actions={[
                     //<RetweetOutlined key="retweet" />,
                     liked
@@ -71,7 +100,9 @@ const PostCard = ({ post }) => {
                 extra={id && <FollowButton post={post} />} // id : 내가 로그인 했을 때만 팔로우 버튼 보이기
             >
                 <Card.Meta 
-                    description={<PostCardContent postData={post.content} />}
+                    description={pictureOrRoute 
+                        ? <PostCardContent postData={post.content} />
+                        : <PostRouteContents />}
                 />
             </Card>
             {commentFormOpened && (

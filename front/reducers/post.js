@@ -44,7 +44,47 @@ export const generateDummyPost = (number) => Array(number).fill().map(() => ({
         },
         content: faker.lorem.sentence(),
     }],
+    Schedules: [{
+        numberOfTrip: 2,
+        TripDates: [{
+            date: new Date()
+        }, {date: new Date()
+        },  
+        ],
+        Routes: [{
+            date: new Date(),
+            spots: [{
+                order: 1,
+                spotName: '에버랜드',
+                spotLatitude: 37.29707,
+                spotLogitude: 127.208, 
+            }, {
+                order: 2,
+                spotName: '롯데월드',
+                spotLatitude: 37.5111,
+                spotLogitude: 127.7472,
+            },]
+        },
+        {
+            date: new Date(),
+            spots: [{
+                order: 1,
+                spotName: '창경궁',
+                spotLatitude: 37.58025,
+                spotLogitude: 126.9948, 
+            }, {
+                order: 2,
+                spotName: '창덕궁',
+                spotLatitude: 37.58239,
+                spotLogitude: 126.9917,
+            },]
+        },
+    ]
+
+
+    }]
 }))
+
 
 //initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
 
