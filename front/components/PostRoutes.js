@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Segmented } from 'antd';
+import { Segmented, Timeline } from 'antd';
 
 
 const PostRoutes = ({ schedules }) => {
@@ -38,6 +38,10 @@ const PostRoutes = ({ schedules }) => {
         },
       ]}
     />
+    <Timeline style={{margin: '20px 20px'}}>
+      <Timeline.Item dot={<img style={{width: '40px', height: '35px'}} src="https://velog.velcdn.com/images/lwy210/post/3e661171-8b4b-421a-b6a6-2f4ec2fce0a8/image.png"/>}>에버랜드</Timeline.Item>
+      <Timeline.Item dot={<img style={{width: '28px', height: '30px'}} src="https://velog.velcdn.com/images/lwy210/post/3f1f6b25-172a-4431-b8b3-c248a2dd99ab/image.png"/>}>롯데월드</Timeline.Item>
+    </Timeline>
         </>
     )
 };

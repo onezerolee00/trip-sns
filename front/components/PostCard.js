@@ -12,7 +12,6 @@ import FollowButton from './FollowButton';
 import { REMOVE_POST_REQUEST } from '../reducers/post';
 import styled from 'styled-components';
 import PostRoutes from './PostRoutes';
-import PostRouteContents from './PostRouteContents';
 
 const Title = styled.div`
     margin: 10px 10px;
@@ -102,7 +101,7 @@ const PostCard = ({ post }) => {
                 <Card.Meta 
                     description={pictureOrRoute 
                         ? <PostCardContent postData={post.content} />
-                        : <PostRouteContents />}
+                        : <div></div>}
                 />
             </Card>
             {commentFormOpened && (
