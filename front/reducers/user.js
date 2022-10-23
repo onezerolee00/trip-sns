@@ -58,8 +58,8 @@ const dummyUser = (data) => ({
     nickname: 'lee',
     id: 1,
     Posts: [{ id: 1 }],
-    Followings: [{ nickname: 'lee' }, { nickname: 'kim' }, { nickname: 'park'}],
-    Followers: [{ nickname: 'lee' }, { nickname: 'kim' }, { nickname: 'park'}],
+    Followings: [{ nickname: 'won', id: 2 }, { nickname: 'kim', id: 3 }, { nickname: 'park', id: 4}],
+    Followers: [{ nickname: 'won', id: 2 }, { nickname: 'kim', id: 3 }, { nickname: 'park', id: 4}],
 })
 
 // export const loginAction = (data) => {
