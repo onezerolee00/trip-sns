@@ -26,7 +26,7 @@ const UserProfile = () => {
             <Menu theme='white' mode="inline">
                 <Menu.Item><Link href="/following"><a><HeartOutlined key="follwings"/> 팔로잉 {me.Followings.length}</a></Link></Menu.Item>
                 <Menu.Item><Link href="/follower"><a><TeamOutlined key="follwings"/> 팔로워 {me.Followers.length}</a></Link></Menu.Item>
-                <Menu.Item><SolutionOutlined key="twit"/> 게시글 {me.Posts.length}</Menu.Item>
+                <Menu.Item><Link href="/myposts"><a><SolutionOutlined key="twit"/> 게시글 {me.Posts.length}</a></Link></Menu.Item>
                 <Menu.Item><MessageOutlined key="comments"/> 댓글</Menu.Item>
                 <Menu.Item><BookOutlined key="scraps"/> 저장됨</Menu.Item>
             </Menu>

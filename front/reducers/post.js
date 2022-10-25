@@ -18,7 +18,10 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+
 };
+
+
 
 // 서버에서 데이터 불러오는 거를 이 함수로 일단 대체
 // + 인피니트 스크롤링
@@ -91,6 +94,7 @@ export const generateDummyPost = (number) => Array(number).fill().map(() => ({
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
 export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
+
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
