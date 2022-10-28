@@ -42,8 +42,10 @@ export const generateDummyPost = (number) => Array(number).fill().map(() => ({
     }],
     Comments: [{
         User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
+            id: 1,
+            nickname: 'lee'
+            // id: shortId.generate(),
+            // nickname: faker.name.findName(),
         },
         content: faker.lorem.sentence(),
     }],
