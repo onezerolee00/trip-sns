@@ -28,7 +28,7 @@ const UserProfile = () => {
                 <Menu.Item><Link href="/follower"><a><TeamOutlined key="follwings"/> 팔로워 {me.Followers.length}</a></Link></Menu.Item>
                 <Menu.Item><Link href="/myposts"><a><SolutionOutlined key="twit"/> 게시글 {me.Posts.length}</a></Link></Menu.Item>
                 <Menu.Item><Link href="/comments"><a><MessageOutlined key="comments"/> 댓글</a></Link></Menu.Item>
-                <Menu.Item><BookOutlined key="scraps"/> 저장됨</Menu.Item>
+                <Menu.Item><Link href="/scrappedposts"><a><BookOutlined key="scraps"/> 저장됨</a></Link></Menu.Item>
             </Menu>
         </Card>
         //<Link href="/profile"><a>

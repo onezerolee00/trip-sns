@@ -27,6 +27,13 @@ const PostForm = () => {
         imageInput.current.click();
     }, [imageInput.current]);
 
+    const [title, onChangeTitle] = useInput('');
+    const [mainTexts, onChangeMainTexts] = useInput('');
+
+    const onSubmitForm = useCallback(() => {
+        console.log(title, mainTexts)
+    }, [title, mainTexts]);
+
     return(
         <>
             <Button block onClick={showModal}>+ 내 여행 게시글 작성하기</Button>
@@ -36,15 +43,21 @@ const PostForm = () => {
                 onOk={handleOk} 
                 onCancel={handleCancle}
                 footer={[
-                    <Button key="add trip route" type="primary">여행 경로 추가</Button>,
-                    <Button key="post" type="primary">게시</Button>
                 ]}>
-                <Input style={{margin: '5px 0px'}} placeholder="게시글 제목을 입력하세요" />
-                <Input.TextArea style={{margin: '5px 0px'}} value={text} onChange={onChangeText} maxLength={140} placeholder="게시글 본문을 작성하세요." />
-                <div>
-                    <input type="file" multiple hidden ref={imageInput}/>
-                    <Button onClick={onClickImageUpload}>+ 사진 업로드</Button> 
-                </div>
+                <Form onFinish={onSubmitForm}>
+                    <Form.Item><Input value={title} onChange={onChangeTitle} style={{margin: '5px 0px'}} placeholder="게시글 제목을 입력하세요" /></Form.Item>
+                    <Form.Item><Input.TextArea value={mainTexts} style={{margin: '5px 0px'}} onChange={onChangeMainTexts} maxLength={140} placeholder="게시글 본문을 작성하세요." /></Form.Item>
+                    <Form.Item>
+                        <div>
+                        <input type="file" multiple hidden ref={imageInput}/>
+                        <Button onClick={onClickImageUpload}>+ 사진 업로드</Button> 
+                        </div>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button key="add trip route" type="button">여행 경로 추가</Button>,
+                        <Button key="post" type="primary" htmlType="submit">게시</Button>
+                    </Form.Item>
+                </Form>
             </Modal>
         
         </>

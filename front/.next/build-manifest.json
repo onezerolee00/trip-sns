@@ -29,11 +29,6 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/comments": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/comments.js"
-    ],
     "/myposts": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
