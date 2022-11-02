@@ -5,14 +5,24 @@ import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
 import PostRoutesForm from './PostRoutesForm';
 
+
 const PostForm = () => {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModal2Open, setIsModal2Open] = useState(false);
     const [text, onChangeText, setText] = useInput('');
     const imageInput = useRef();
-    const { RangePicker } = DatePicker;
+    // const { RangePicker } = DatePicker;
 
+
+    const onChangeDate = (e) => {
+        if(moment.isMoment(e)) {
+            setState({...state, [e.name]:e});
+        }
+        else {
+            setState({...state, [e.target.name]:e.target.value});
+        }
+    }
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -21,6 +31,7 @@ const PostForm = () => {
     const showModal2 = () => {
         setIsModal2Open(true);
     };
+
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -49,6 +60,10 @@ const PostForm = () => {
     const onSubmitForm = useCallback(() => {
         console.log(title, mainTexts)
     }, [title, mainTexts]);
+
+    const updateDate = (value, dateString) => {
+        this.setSta
+    }
 
     const PostRoutesForms = () => {
         return(
@@ -114,10 +129,18 @@ const PostForm = () => {
                     ]}>
                     <Form onFinish={onSubmitForm}>
                         <Form.Item>
-                            <RangePicker size="middle" />
+                            <DatePicker value={state.my_date} size="middle" onChange={(e) => {
+                                e.name = "my_date"
+                                onChange(e)
+                            }}/>
                         </Form.Item>
                         <Form.Item>
-                            <Button key="post" type="primary">게시</Button>
+                            <Button key="post" type="button" onClick={showInputDate}>날짜 설정</Button>
+                        </Form.Item>
+                        <Form.Item>
+                            {isDateInput
+                            ? <div>{date}</div>
+                            : <div></div>}
                         </Form.Item>
                     </Form>
                 </Modal>
