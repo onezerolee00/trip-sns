@@ -1,4 +1,5 @@
-import { Form, Input, Button, Modal, DatePicker } from 'antd';
+import { Form, Input, Button, Modal, DatePicker, Radio } from 'antd';
+import { daysInWeek } from 'date-fns';
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
@@ -10,19 +11,11 @@ const PostForm = () => {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModal2Open, setIsModal2Open] = useState(false);
+    const [isRadioOpen, setIsRadioOpen] = useState(false);
     const [text, onChangeText, setText] = useInput('');
     const imageInput = useRef();
-    // const { RangePicker } = DatePicker;
+    const { RangePicker } = DatePicker;
 
-
-    const onChangeDate = (e) => {
-        if(moment.isMoment(e)) {
-            setState({...state, [e.name]:e});
-        }
-        else {
-            setState({...state, [e.target.name]:e.target.value});
-        }
-    }
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -61,38 +54,52 @@ const PostForm = () => {
         console.log(title, mainTexts)
     }, [title, mainTexts]);
 
-    const updateDate = (value, dateString) => {
-        this.setSta
+
+    var btDay = 0;
+    var startDate;
+    var endDate;
+    var DateArray = [];
+
+    const makeDateRadio = () => {
+        setIsRadioOpen(true);
+        console.log(btDay);
+        var D = startDate;
+        
+        for(var i=0; i<=btDay; i++) {
+            DateArray.push([D.getFullYear(), D.getMonth(), D.getDate()]);
+            D.setDate(D.getDate() + 1);
+        }
+
+        console.log(DateArray);
+
     }
 
-    const PostRoutesForms = () => {
-        return(
-            <>
-                <Modal 
-                    title="여행 루트" 
-                    open={true} 
-                    onOk={handleOk} 
-                    onCancel={handleCancle}
-                    footer={[
-                    ]}>
-                    <Form onFinish={onSubmitForm}>
-                        <Form.Item>
-                            <div>
-                            <input type="file" multiple hidden ref={imageInput}/>
-                            <Button onClick={onClickImageUpload}>+ 사진 업로드</Button> 
-                            </div>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button key="add trip route" type="button">여행 경로 추가</Button>,
-                            <Button key="post" type="primary" htmlType="submit">게시</Button>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            
-            </>
-    
-        )
-    };
+    const onChangeDate = (range) => {
+        const Date1 = range[0].format();
+        const Date2 = range[1].format();
+
+        var year1 = Date1.substring(0, 4);
+        var year2 = Date2.substring(0, 4);
+        var month1 = Date1.substring(5, 7);
+        var month2 = Date2.substring(5, 7);
+        var day1 = Date1.substring(8, 10);
+        var day2 = Date2.substring(8, 10);
+
+        startDate = new Date(year1, month1-1, day1);
+        endDate = new Date(year2, month2-1, day2);
+
+        var btMs = endDate.getTime() - startDate.getTime();
+        btDay = btMs / (1000*60*60*24) + 1;
+        
+
+        console.log('start date', Date1);
+        console.log('end date', Date2);
+        console.log('start date', startDate);
+        console.log('end date', endDate);
+        console.log('day', btDay)
+
+
+    }
 
     return(
         <>
@@ -129,18 +136,20 @@ const PostForm = () => {
                     ]}>
                     <Form onFinish={onSubmitForm}>
                         <Form.Item>
-                            <DatePicker value={state.my_date} size="middle" onChange={(e) => {
-                                e.name = "my_date"
-                                onChange(e)
-                            }}/>
+                            <RangePicker size="middle" onChange={onChangeDate}/>
                         </Form.Item>
                         <Form.Item>
-                            <Button key="post" type="button" onClick={showInputDate}>날짜 설정</Button>
+                            <Button key="post" type="button" onClick={makeDateRadio}>날짜 설정</Button>
                         </Form.Item>
+                        {/* <Form.Item>
+                            <Radio.Group>
+                                {isRadioOpen && DateArray.map((v) => <Radio.Button>{v[0] + `년` + v[1]+1 + `월` + v[2] + `일`}</Radio.Button>)}
+                            </Radio.Group>
+                        </Form.Item> */}
                         <Form.Item>
-                            {isDateInput
-                            ? <div>{date}</div>
-                            : <div></div>}
+                            <Radio.Group>
+
+                            </Radio.Group>
                         </Form.Item>
                     </Form>
                 </Modal>
