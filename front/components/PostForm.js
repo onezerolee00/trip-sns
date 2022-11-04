@@ -1,10 +1,11 @@
-import { Form, Input, Button, Modal, DatePicker, Radio } from 'antd';
+import { Form, Input, Button, Modal, DatePicker, Radio, Segmented, Space } from 'antd';
 import { daysInWeek } from 'date-fns';
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
 import PostRoutesForm from './PostRoutesForm';
+import { MinusCircleOutlined, PlusOutlined  } from '@ant-design/icons';
 
 
 const PostForm = () => {
@@ -15,6 +16,7 @@ const PostForm = () => {
     const [text, onChangeText, setText] = useInput('');
     const imageInput = useRef();
     const { RangePicker } = DatePicker;
+    const [DateList, setDateList] = useState([]);
 
 
     const showModal = () => {
@@ -61,17 +63,18 @@ const PostForm = () => {
     var DateArray = [];
 
     const makeDateRadio = () => {
-        setIsRadioOpen(true);
         console.log(btDay);
         var D = startDate;
         
-        for(var i=0; i<=btDay; i++) {
-            DateArray.push([D.getFullYear(), D.getMonth(), D.getDate()]);
+        for(var i=0; i<btDay; i++) {
+            //DateArray.push([D.getFullYear(), D.getMonth(), D.getDate()]);
+            DateArray.push(D.getFullYear() + '년 ' + (D.getMonth() + 1) + '월 ' + D.getDate() + '일');
             D.setDate(D.getDate() + 1);
         }
 
         console.log(DateArray);
-
+        setDateList(DateArray);
+        setIsRadioOpen(true);
     }
 
     const onChangeDate = (range) => {
@@ -99,6 +102,9 @@ const PostForm = () => {
         console.log('day', btDay)
 
 
+    }
+    const onFinish = (values) => {
+        console.log('Received values of form:', values);
     }
 
     return(
@@ -147,11 +153,49 @@ const PostForm = () => {
                             </Radio.Group>
                         </Form.Item> */}
                         <Form.Item>
-                            <Radio.Group>
-
-                            </Radio.Group>
+                            <Segmented size="small" options={DateList} />
+                            {/* {isRadioOpen && <Segmented size="small" options={DateArray} />} */}
+                            {/* <Segmented size="small" options={['a', 'b', 'c']} /> */}
                         </Form.Item>
+
                     </Form>
+                    <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+                        <Form.List name="users">
+                            {(fields, { add, remove }) => (
+                            <>
+                                {fields.map(({ key, name, ...restField }) => (
+                                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                    <Form.Item
+                                    {...restField}
+                                    name={[name, 'first']}
+                                    rules={[{ required: true, message: 'Missing first name' }]}
+                                    >
+                                    <Input placeholder="여행지 명" />
+                                    </Form.Item>
+                                    <Form.Item
+                                    {...restField}
+                                    name={[name, 'last']}
+                                    rules={[{ required: true, message: 'Missing last name' }]}
+                                    >
+                                    <Input placeholder="여행지 주소" />
+                                    </Form.Item>
+                                    <MinusCircleOutlined onClick={() => remove(name)} />
+                                </Space>
+                                ))}
+                                <Form.Item>
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                    Add field
+                                </Button>
+                                </Form.Item>
+                            </>
+                            )}
+                        </Form.List>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                            Submit
+                            </Button>
+                        </Form.Item>
+                        </Form>
                 </Modal>
             
             </>
