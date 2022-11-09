@@ -1,4 +1,4 @@
-import { Form, Input, Button, Modal, DatePicker, Radio, Segmented, Space } from 'antd';
+import { Form, Input, Button, Modal, DatePicker, Radio, Segmented, Space, InputNumber } from 'antd';
 import { daysInWeek } from 'date-fns';
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,12 +12,14 @@ const PostForm = () => {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModal2Open, setIsModal2Open] = useState(false);
+    const [WhatModalOpen, setWhatModalOpen] = useState([]);
     const [isRadioOpen, setIsRadioOpen] = useState(false);
     const [text, onChangeText, setText] = useInput('');
     const imageInput = useRef();
     const { RangePicker } = DatePicker;
     const [DateList, setDateList] = useState([]);
 
+    var Open = []
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -26,7 +28,6 @@ const PostForm = () => {
     const showModal2 = () => {
         setIsModal2Open(true);
     };
-
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -44,7 +45,6 @@ const PostForm = () => {
         setIsModal2Open(false);
     };
 
-
     const onClickImageUpload = useCallback(()=> {
         imageInput.current.click();
     }, [imageInput.current]);
@@ -56,7 +56,6 @@ const PostForm = () => {
         console.log(title, mainTexts)
     }, [title, mainTexts]);
 
-
     var btDay = 0;
     var startDate;
     var endDate;
@@ -67,15 +66,44 @@ const PostForm = () => {
         var D = startDate;
         
         for(var i=0; i<btDay; i++) {
-            //DateArray.push([D.getFullYear(), D.getMonth(), D.getDate()]);
-            DateArray.push(D.getFullYear() + '년 ' + (D.getMonth() + 1) + '월 ' + D.getDate() + '일');
+            DateArray.push([i, D.getFullYear(), D.getMonth()+1, D.getDate()]);
+            Open.push(true);
+            // DateArray.push(D.getFullYear() + '년 ' + (D.getMonth() + 1) + '월 ' + D.getDate() + '일');
             D.setDate(D.getDate() + 1);
         }
+        DateArray = DateArray.reverse();
 
         console.log(DateArray);
         setDateList(DateArray);
+        setWhatModalOpen(Open);
         setIsRadioOpen(true);
+        
+        console.log('Radio Open ' + Open);
+        console.log('Radio WhatModalOpen ' + WhatModalOpen);
     }
+
+    const handleOk3 = (v) => {
+        Open = WhatModalOpen
+        for(var i=0; i<Open.length; i++) {
+            if(i==v[0]){
+                Open[i] = false;
+            }
+        }
+    }
+
+    const handleCancle3 = (v) => {
+        Open = WhatModalOpen.slice()
+        console.log('캔슬 Open', Open);
+        for(var i=0; i<Open.length; i++) {
+            if(i==v[0]){
+                Open[i] = false;
+            }
+        }
+        setWhatModalOpen(Open);
+        console.log('Cancle', WhatModalOpen);
+        console.log('현재 바ㅜ낀거', WhatModalOpen[v[0]]);
+        console.log('v[0]', v[0]);
+    };
 
     const onChangeDate = (range) => {
         const Date1 = range[0].format();
@@ -149,35 +177,58 @@ const PostForm = () => {
                         </Form.Item>
                         {/* <Form.Item>
                             <Radio.Group>
-                                {isRadioOpen && DateArray.map((v) => <Radio.Button>{v[0] + `년` + v[1]+1 + `월` + v[2] + `일`}</Radio.Button>)}
+                                {isRadioOpen && DateList.map((v) => <Button type="button" onClick={handleCancle2}>{v[1] + `년` + v[2] + `월` + v[3] + `일`}</Button>)}
                             </Radio.Group>
                         </Form.Item> */}
                         <Form.Item>
-                            <Segmented size="small" options={DateList} />
+                            {/* <Segmented size="small" options={DateList} /> */}
+
+
                             {/* {isRadioOpen && <Segmented size="small" options={DateArray} />} */}
                             {/* <Segmented size="small" options={['a', 'b', 'c']} /> */}
                         </Form.Item>
 
                     </Form>
+
+                </Modal>
+            </>
+            <>
+            {isRadioOpen && DateList.map((v) => <Modal 
+                    title={v[1]+'년 '+v[2]+'월 '+v[3]+'일'} 
+                    open={WhatModalOpen[v[0]]} 
+                    onOk={() => handleOk3(v)} 
+                    onCancel={()=>handleCancle3(v)}
+                    footer={[
+                    ]}>
                     <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
                         <Form.List name="users">
                             {(fields, { add, remove }) => (
                             <>
                                 {fields.map(({ key, name, ...restField }) => (
                                 <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Form.Item
+                                    <Form.Item rules={[{ type: 'number', min: 0, max: 99 }]}>
+                                        <InputNumber />
+                                    </Form.Item>
+                                    {/* <Form.Item
                                     {...restField}
                                     name={[name, 'first']}
                                     rules={[{ required: true, message: 'Missing first name' }]}
                                     >
                                     <Input placeholder="여행지 명" />
+                                    </Form.Item> */}
+                                    <Form.Item>
+                                        <Input placeholder="여행지 명"/>
                                     </Form.Item>
-                                    <Form.Item
+
+                                    {/* <Form.Item
                                     {...restField}
                                     name={[name, 'last']}
                                     rules={[{ required: true, message: 'Missing last name' }]}
                                     >
                                     <Input placeholder="여행지 주소" />
+                                    </Form.Item> */}
+                                    <Form.Item>
+                                        <Input placeholder="여행지 주소"/>
                                     </Form.Item>
                                     <MinusCircleOutlined onClick={() => remove(name)} />
                                 </Space>
@@ -196,8 +247,8 @@ const PostForm = () => {
                             </Button>
                         </Form.Item>
                         </Form>
-                </Modal>
-            
+
+                </Modal>)}
             </>
         
         </>
