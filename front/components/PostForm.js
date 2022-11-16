@@ -6,7 +6,8 @@ import useInput from '../hooks/useInput';
 import { addPost } from '../reducers/post';
 import PostRoutesForm from './PostRoutesForm';
 import { MinusCircleOutlined, PlusOutlined  } from '@ant-design/icons';
-
+import SpotForm from './SpotForm';
+import SpotInfoListView from './SpotInfoListView';
 
 const PostForm = () => {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
@@ -19,7 +20,28 @@ const PostForm = () => {
     const { RangePicker } = DatePicker;
     const [DateList, setDateList] = useState([]);
 
+    const [spotOrder, onChangeSpotOrder, setSpotOrder] = useInput(0);
+    const [spotName, onChangeSpotName, setSpotName] = useInput('');
+    const [spotAddress, onChangeSpotAddress, setSpotAddress] = useInput('');
+    const [spotMemo, onChangeSpotMemo, setSpotMemo] = useInput('');
+    const [route, setRoute] = useState([]);
+    const [isAddButton, setIsAddButton] = useState(false);
+
+    const [spotId, setSpotId] = useState(0)
+    const [spotList, setSpotList] = useState([])
+
+    useEffect(() => {
+        console.log(spotList)
+      }, [spotList])
+  
+    const handleOnCreate = (spotInfo) => {
+      setSpotList(spotList.concat({ spotOrder: spotId, spotName: spotInfo.spotName, spotAddress: spotInfo.spotAddress }))
+      setSpotId(c => c + 1)
+    }
+
+
     var Open = []
+    var Route_List = []
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -83,7 +105,7 @@ const PostForm = () => {
     }
 
     const handleOk3 = (v) => {
-        Open = WhatModalOpen
+        Open = WhatModalOpen.slice()
         for(var i=0; i<Open.length; i++) {
             if(i==v[0]){
                 Open[i] = false;
@@ -93,6 +115,7 @@ const PostForm = () => {
 
     const handleCancle3 = (v) => {
         Open = WhatModalOpen.slice()
+        console.log('캔슬 WhatModalOpen', WhatModalOpen);
         console.log('캔슬 Open', Open);
         for(var i=0; i<Open.length; i++) {
             if(i==v[0]){
@@ -135,6 +158,45 @@ const PostForm = () => {
         console.log('Received values of form:', values);
     }
 
+    const onSubmit = useCallback((v) => {
+        // dispatch(addPost(text));
+        // console.log(spotOrder, spotName, spotAddress, spotMemo)
+        // setSpotList([]);
+
+    }, []);
+
+    const onPrint = useCallback(() => {
+        // dispatch(addPost(text));
+        console.log(spotOrder, spotName, spotAddress, spotMemo)
+        console.log(JSON.stringify({spotOrder, spotName, spotAddress, spotMemo}))
+        Route_List.push([spotOrder, spotName, spotAddress, spotMemo])
+        setRoute(Route_List)
+        console.log(Route_List)
+        console.log(route)
+        setIsAddButton(true);
+
+    }, [spotOrder, spotName, spotAddress, spotMemo]);
+
+    const ClearList = useCallback((v) => {
+
+        Open = WhatModalOpen.slice()
+        console.log('Open', Open)
+        console.log('WhatModalOpen', WhatModalOpen)
+
+
+        // for(var i=0; i<Open.length; i++) {
+        //     if(i==v[0]){
+        //         console.log('i==v[0]', i, v[0])
+        //         Open[i] = false;
+        //     }
+        // }
+        // console.log('Open2', Open)
+
+        // setWhatModalOpen(Open);
+        // setSpotList([]);
+
+    }, []);
+
     return(
         <>
             <Button block onClick={showModal}>+ 내 여행 게시글 작성하기</Button>
@@ -175,19 +237,6 @@ const PostForm = () => {
                         <Form.Item>
                             <Button key="post" type="button" onClick={makeDateRadio}>날짜 설정</Button>
                         </Form.Item>
-                        {/* <Form.Item>
-                            <Radio.Group>
-                                {isRadioOpen && DateList.map((v) => <Button type="button" onClick={handleCancle2}>{v[1] + `년` + v[2] + `월` + v[3] + `일`}</Button>)}
-                            </Radio.Group>
-                        </Form.Item> */}
-                        <Form.Item>
-                            {/* <Segmented size="small" options={DateList} /> */}
-
-
-                            {/* {isRadioOpen && <Segmented size="small" options={DateArray} />} */}
-                            {/* <Segmented size="small" options={['a', 'b', 'c']} /> */}
-                        </Form.Item>
-
                     </Form>
 
                 </Modal>
@@ -200,35 +249,40 @@ const PostForm = () => {
                     onCancel={()=>handleCancle3(v)}
                     footer={[
                     ]}>
-                    <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-                        <Form.List name="users">
+                    <Form name="routesForm" onFinish={onSubmit}>
+                    {/* <Form.Item>
+                                <Input value={spotOrder} onChange={onChangeSpotOrder}/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input value={spotName} onChange={onChangeSpotName} placeholder="여행지 명"/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input value={spotAddress} onChange={onChangeSpotAddress} placeholder="여행지 주소"/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input value={spotMemo} onChange={onChangeSpotMemo} placeholder="메모"/>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="button" onClick={onPrint}>
+                                    추가
+                                </Button>
+                            </Form.Item> */}
+                        {/* <Form.List name="routes">
                             {(fields, { add, remove }) => (
                             <>
                                 {fields.map(({ key, name, ...restField }) => (
                                 <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                                     <Form.Item rules={[{ type: 'number', min: 0, max: 99 }]}>
-                                        <InputNumber />
+                                        <InputNumber value={spotOrder} onChange={onChangeSpotOrder}/>
                                     </Form.Item>
-                                    {/* <Form.Item
-                                    {...restField}
-                                    name={[name, 'first']}
-                                    rules={[{ required: true, message: 'Missing first name' }]}
-                                    >
-                                    <Input placeholder="여행지 명" />
-                                    </Form.Item> */}
                                     <Form.Item>
-                                        <Input placeholder="여행지 명"/>
+                                        <Input value={spotName} onChange={onChangeSpotName} placeholder="여행지 명"/>
                                     </Form.Item>
-
-                                    {/* <Form.Item
-                                    {...restField}
-                                    name={[name, 'last']}
-                                    rules={[{ required: true, message: 'Missing last name' }]}
-                                    >
-                                    <Input placeholder="여행지 주소" />
-                                    </Form.Item> */}
                                     <Form.Item>
-                                        <Input placeholder="여행지 주소"/>
+                                        <Input value={spotAddress} onChange={onChangeSpotAddress} placeholder="여행지 주소"/>
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <Input value={spotMemo} onChange={onChangeSpotMemo} placeholder="메모"/>
                                     </Form.Item>
                                     <MinusCircleOutlined onClick={() => remove(name)} />
                                 </Space>
@@ -240,9 +294,12 @@ const PostForm = () => {
                                 </Form.Item>
                             </>
                             )}
-                        </Form.List>
+                        </Form.List> */}
+                        <SpotForm onCreate={(spotInfo) => handleOnCreate(spotInfo)} />
+                        <SpotInfoListView spotList={spotList} />
+
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
+                            <Button type="button" onClick={() => ClearList(v)}>
                             Submit
                             </Button>
                         </Form.Item>
