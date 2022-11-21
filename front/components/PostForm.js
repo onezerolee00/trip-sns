@@ -29,6 +29,7 @@ const PostForm = () => {
 
     const [spotId, setSpotId] = useState(0)
     const [spotList, setSpotList] = useState([])
+    const [schduleList, setScheduleList] = useState([])
 
     useEffect(() => {
         console.log(spotList)
@@ -42,6 +43,7 @@ const PostForm = () => {
 
     var Open = []
     var Route_List = []
+    var Schedule_List = []
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -90,7 +92,6 @@ const PostForm = () => {
         for(var i=0; i<btDay; i++) {
             DateArray.push([i, D.getFullYear(), D.getMonth()+1, D.getDate()]);
             Open.push(true);
-            // DateArray.push(D.getFullYear() + '년 ' + (D.getMonth() + 1) + '월 ' + D.getDate() + '일');
             D.setDate(D.getDate() + 1);
         }
         DateArray = DateArray.reverse();
@@ -124,7 +125,7 @@ const PostForm = () => {
         }
         setWhatModalOpen(Open);
         console.log('Cancle', WhatModalOpen);
-        console.log('현재 바ㅜ낀거', WhatModalOpen[v[0]]);
+        console.log('현재 바뀐거', WhatModalOpen[v[0]]);
         console.log('v[0]', v[0]);
     };
 
@@ -154,6 +155,9 @@ const PostForm = () => {
 
 
     }
+    const setSchdule = useCallback(() => {
+        handleCancle2();
+    });
     const onFinish = (values) => {
         console.log('Received values of form:', values);
     }
@@ -179,21 +183,21 @@ const PostForm = () => {
 
     const ClearList = useCallback((v) => {
 
-        Open = WhatModalOpen.slice()
-        console.log('Open', Open)
-        console.log('WhatModalOpen', WhatModalOpen)
+        var O = []
 
+        console.log('DateList', DateList.length)
 
-        // for(var i=0; i<Open.length; i++) {
-        //     if(i==v[0]){
-        //         console.log('i==v[0]', i, v[0])
-        //         Open[i] = false;
-        //     }
-        // }
-        // console.log('Open2', Open)
-
-        // setWhatModalOpen(Open);
-        // setSpotList([]);
+        for(var i=0; i<DateList.length; i++) {
+            if(i<=v[0]) {
+                O.push(false)
+            } else {
+                O.push(true)
+            }
+        }
+        console.log('v', v[0])
+        console.log('O', O)
+        setWhatModalOpen(O);
+        setSpotList([]);
 
     }, []);
 
@@ -237,6 +241,9 @@ const PostForm = () => {
                         <Form.Item>
                             <Button key="post" type="button" onClick={makeDateRadio}>날짜 설정</Button>
                         </Form.Item>
+                        <Form.Item>
+                            <Button key="post" type="primary" onClick={setSchdule}>일정 등록</Button>
+                        </Form.Item>
                     </Form>
 
                 </Modal>
@@ -250,51 +257,6 @@ const PostForm = () => {
                     footer={[
                     ]}>
                     <Form name="routesForm" onFinish={onSubmit}>
-                    {/* <Form.Item>
-                                <Input value={spotOrder} onChange={onChangeSpotOrder}/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Input value={spotName} onChange={onChangeSpotName} placeholder="여행지 명"/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Input value={spotAddress} onChange={onChangeSpotAddress} placeholder="여행지 주소"/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Input value={spotMemo} onChange={onChangeSpotMemo} placeholder="메모"/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="button" onClick={onPrint}>
-                                    추가
-                                </Button>
-                            </Form.Item> */}
-                        {/* <Form.List name="routes">
-                            {(fields, { add, remove }) => (
-                            <>
-                                {fields.map(({ key, name, ...restField }) => (
-                                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Form.Item rules={[{ type: 'number', min: 0, max: 99 }]}>
-                                        <InputNumber value={spotOrder} onChange={onChangeSpotOrder}/>
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Input value={spotName} onChange={onChangeSpotName} placeholder="여행지 명"/>
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Input value={spotAddress} onChange={onChangeSpotAddress} placeholder="여행지 주소"/>
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Input value={spotMemo} onChange={onChangeSpotMemo} placeholder="메모"/>
-                                    </Form.Item>
-                                    <MinusCircleOutlined onClick={() => remove(name)} />
-                                </Space>
-                                ))}
-                                <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                    Add field
-                                </Button>
-                                </Form.Item>
-                            </>
-                            )}
-                        </Form.List> */}
                         <SpotForm onCreate={(spotInfo) => handleOnCreate(spotInfo)} />
                         <SpotInfoListView spotList={spotList} />
 

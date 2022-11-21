@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 
+
 function SpotInfo({ info = {spotName: "N/A", spotAddress: "N/A" } }) {
 
     useEffect(() => {
-        console.log("SpotInfo component created")
+        console.log("SpotInfo component created");
     }, [])
 
     return (
